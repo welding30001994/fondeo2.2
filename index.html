@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fondeo Instantáneo · Cuentas</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f6f9fc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 48px;
+            box-shadow: 0 30px 60px rgba(0, 20, 40, 0.08), 0 10px 30px rgba(0, 0, 0, 0.02);
+            padding: 2.5rem 2.5rem 3rem;
+            transition: all 0.2s ease;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand i {
+            font-size: 2.2rem;
+            color: #0b2b4a;
+            background: #eef3f7;
+            padding: 10px;
+            border-radius: 18px;
+        }
+
+        .brand h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #0b2b4a;
+        }
+
+        .brand span {
+            color: #2a7de1;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-area .email {
+            font-weight: 500;
+            color: #1e293b;
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #d0d9e4;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e293b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .btn-primary {
+            background: #0b2b4a;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            background: #1a3f5f;
+            transform: scale(1.02);
+        }
+
+        /* Auth forms */
+        .auth-section {
+            max-width: 420px;
+            margin: 1rem auto 2rem;
+            background: #f9fcff;
+            padding: 2rem 2rem 1.8rem;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .auth-section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b2b4a;
+            margin-bottom: 0.25rem;
+        }
+
+        .auth-section p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .auth-section input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .auth-section input:focus {
+            outline: none;
+            border-color: #2a7de1;
+            box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.15);
+        }
+
+        .auth-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .auth-row .btn-primary {
+            flex: 1;
+            text-align: center;
+        }
+
+        .auth-switch {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .auth-switch a {
+            color: #2a7de1;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 8px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none;
+        }
+
+        /* Home (cuentas) */
+        .home-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .home-header h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+
+        .home-header h2 i {
+            color: #2a7de1;
+            margin-right: 10px;
+        }
+
+        .wallet-badge {
+            background: #eef7ff;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #0b2b4a;
+            border: 1px solid #d4e2f5;
+        }
+
+        .wallet-badge i {
+            margin-right: 8px;
+            color: #2a7de1;
+        }
+
+        .wallet-address {
+            background: #f8fafc;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px dashed #94a3b8;
+            color: #1e293b;
+            margin: 10px 0 16px 0;
+            display: inline-block;
+            word-break: break-all;
+        }
+
+        .grid-cuentas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .cuenta-card {
+            background: #ffffff;
+            border: 1.5px solid #eef2f6;
+            border-radius: 28px;
+            padding: 1.5rem 0.8rem 1.2rem;
+            text-align: center;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        }
+
+        .cuenta-card:hover {
+            transform: translateY(-4px);
+            border-color: #cbd9e9;
+            box-shadow: 0 12px 24px rgba(0, 20, 40, 0.04);
+        }
+
+        .cuenta-card .monto {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0b2b4a;
+            letter-spacing: -0.5px;
+        }
+
+        .cuenta-card .precio {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2a7de1;
+            margin: 6px 0 12px;
+        }
+
+        .cuenta-card .precio small {
+            font-weight: 400;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .btn-comprar {
+            background: #0b2b4a;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
+        }
+
+        .btn-comprar:hover {
+            background: #1a3f5f;
+        }
+
+        .footer-note {
+            margin-top: 2.2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            border-top: 1px solid #e9eef3;
+            padding-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-note i {
+            color: #2a7de1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* responsive */
+        @media (max-width: 650px) {
+            .container { padding: 1.5rem; }
+            .brand h1 { font-size: 1.4rem; }
+            .header { flex-direction: column; align-items: stretch; gap: 12px; }
+            .user-area { justify-content: flex-start; flex-wrap: wrap; }
+            .grid-cuentas { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 450px) {
+            .grid-cuentas { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="appContainer">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="brand">
+            <i class="fas fa-rocket"></i>
+            <h1>Fondeo <span>Instantáneo</span></h1>
+        </div>
+        <div class="user-area" id="userArea">
+            <span class="email" id="userEmail">usuario@email.com</span>
+            <button class="btn-outline" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Salir</button>
+        </div>
+    </div>
+
+    <!-- ========== SECCIÓN AUTH ========== -->
+    <div id="authSection" class="auth-section">
+        <h2 id="authTitle">Iniciar sesión</h2>
+        <p id="authSubtitle">Accede a tu cuenta de fondeo</p>
+
+        <div id="errorMessage" class="error-msg"><i class="fas fa-exclamation-circle"></i> <span id="errorText">Error</span></div>
+
+        <input type="email" id="emailInput" placeholder="Correo electrónico" />
+        <input type="password" id="passwordInput" placeholder="Contraseña (mínimo 6 caracteres)" />
+
+        <div class="auth-row">
+            <button class="btn-primary" id="authActionBtn"><i class="fas fa-arrow-right"></i> Ingresar</button>
+        </div>
+
+        <div class="auth-switch" id="authSwitch">
+            ¿No tienes cuenta? <a id="toggleAuthLink">Regístrate</a>
+        </div>
+    </div>
+
+    <!-- ========== HOME (cuentas) ========== -->
+    <div id="homeSection" class="hidden">
+        <div class="home-header">
+            <h2><i class="fas fa-coins"></i> Cuentas de fondeo</h2>
+            <div class="wallet-badge"><i class="fas fa-wallet"></i> USDT (TRC20)</div>
+        </div>
+
+        <!-- Dirección de monedero -->
+        <div style="margin: 0 0 4px 0;">
+            <span style="font-weight: 600; color: #0b2b4a;"><i class="fas fa-qrcode"></i> Deposita aquí:</span>
+            <div class="wallet-address">
+                <i class="fas fa-copy" style="cursor:pointer; margin-right: 8px; color:#2a7de1;" id="copyWalletBtn"></i>
+                TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5
+            </div>
+        </div>
+
+        <!-- Grid de cuentas -->
+        <div class="grid-cuentas" id="cuentasGrid">
+            <!-- inyectado con JS -->
+        </div>
+
+        <div class="footer-note">
+            <span><i class="fas fa-shield-alt"></i> Compra segura · Soporte 24/7</span>
+            <span><i class="fas fa-bolt"></i> Acreditación instantánea</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============ CONFIGURACIÓN FIREBASE ============
+    const firebaseConfig = {
+        apiKey: "AIzaSyCpFnSLx-ZUq6j27T-w_nvsdSvUrNs688g",
+        authDomain: "heyding-kayser.firebaseapp.com",
+        databaseURL: "https://heyding-kayser-default-rtdb.firebaseio.com",
+        projectId: "heyding-kayser",
+        storageBucket: "heyding-kayser.firebasestorage.app",
+        messagingSenderId: "231005618306",
+        appId: "1:231005618306:web:b349379b513145b6e6349b",
+        measurementId: "G-0F9T839VVZ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // ============ ELEMENTOS DOM ============
+    const authSection = document.getElementById('authSection');
+    const homeSection = document.getElementById('homeSection');
+    const userEmail = document.getElementById('userEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const authActionBtn = document.getElementById('authActionBtn');
+    const authTitle = document.getElementById('authTitle');
+    const authSubtitle = document.getElementById('authSubtitle');
+    const toggleAuthLink = document.getElementById('toggleAuthLink');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const cuentasGrid = document.getElementById('cuentasGrid');
+
+    let isLogin = true; // true = login, false = registro
+
+    // ============ DATOS DE CUENTAS ============
+    const cuentas = [
+        { monto: 10000, precio: 650 },
+        { monto: 25000, precio: 750 },
+        { monto: 50000, precio: 850 },
+        { monto: 100000, precio: 1200 },
+        { monto: 200000, precio: 2150 },
+        { monto: 500000, precio: 3500 },
+        { monto: 1000000, precio: 5000 }
+    ];
+
+    // ============ RENDER CUENTAS ============
+    function renderCuentas() {
+        cuentasGrid.innerHTML = '';
+        cuentas.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'cuenta-card';
+            card.innerHTML = `
+                <div class="monto">$${c.monto.toLocaleString()}</div>
+                <div class="precio">$${c.precio} <small>USD</small></div>
+                <button class="btn-comprar" data-monto="${c.monto}" data-precio="${c.precio}">
+                    <i class="fas fa-cart-plus"></i> Comprar
+                </button>
+            `;
+            cuentasGrid.appendChild(card);
+        });
+
+        // Eventos comprar
+        document.querySelectorAll('.btn-comprar').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const monto = this.dataset.monto;
+                const precio = this.dataset.precio;
+                alert(`✅ Cuenta de $${Number(monto).toLocaleString()} seleccionada.\nPrecio: $${precio} USD\n\nDeposita exactamente $${precio} USDT (TRC20) a la dirección mostrada.\n\nDirección: TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5`);
+                // Aquí podrías agregar lógica de pago / redirección
+            });
+        });
+    }
+
+    // ============ ACTUALIZAR UI SEGÚN AUTENTICACIÓN ============
+    function updateUI(user) {
+        if (user) {
+            // Usuario logueado
+            authSection.classList.add('hidden');
+            homeSection.classList.remove('hidden');
+            userEmail.textContent = user.email || 'usuario';
+            renderCuentas();
+        } else {
+            // No logueado
+            authSection.classList.remove('hidden');
+            homeSection.classList.add('hidden');
+            // Resetear formulario
+            emailInput.value = '';
+            passwordInput.value = '';
+            errorMessage.style.display = 'none';
+            setAuthMode(true);
+        }
+    }
+
+    // ============ MODO LOGIN / REGISTRO ============
+    function setAuthMode(login) {
+        isLogin = login;
+        if (login) {
+            authTitle.textContent = 'Iniciar sesión';
+            authSubtitle.textContent = 'Accede a tu cuenta de fondeo';
+            authActionBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Ingresar';
+            toggleAuthLink.textContent = 'Regístrate';
+            // Cambiar comportamiento del link
+        } else {
+            authTitle.textContent = 'Crear cuenta';
+            authSubtitle.textContent = 'Regístrate para acceder a las cuentas';
+            authActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> Registrarse';
+            toggleAuthLink.textContent = 'Iniciar sesión';
+        }
+        errorMessage.style.display = 'none';
+    }
+
+    // ============ TOGGLE AUTH ============
+    toggleAuthLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        setAuthMode(!isLogin);
+    });
+
+    // ============ ACCIÓN PRINCIPAL AUTH ============
+    async function handleAuthAction() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!email || !password) {
+            showError('Por favor, completa todos los campos.');
+            return;
+        }
+        if (password.length < 6) {
+            showError('La contraseña debe tener al menos 6 caracteres.');
+            return;
+        }
+
+        try {
+            if (isLogin) {
+                // Iniciar sesión
+                await auth.signInWithEmailAndPassword(email, password);
+            } else {
+                // Registro
+                await auth.createUserWithEmailAndPassword(email, password);
+            }
+            // Si llega aquí, el listener se encarga de actualizar UI
+        } catch (error) {
+            console.error(error);
+            let msg = error.message;
+            if (error.code === 'auth/user-not-found') msg = 'Usuario no encontrado.';
+            else if (error.code === 'auth/wrong-password') msg = 'Contraseña incorrecta.';
+            else if (error.code === 'auth/email-already-in-use') msg = 'Este correo ya está registrado.';
+            else if (error.code === 'auth/invalid-email') msg = 'Correo inválido.';
+            showError(msg);
+        }
+    }
+
+    authActionBtn.addEventListener('click', handleAuthAction);
+
+    // Enter key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !authSection.classList.contains('hidden')) {
+            handleAuthAction();
+        }
+    });
+
+    function showError(msg) {
+        errorMessage.style.display = 'block';
+        errorText.textContent = msg;
+    }
+
+    // ============ CIERRE DE SESIÓN ============
+    logoutBtn.addEventListener('click', function() {
+        auth.signOut();
+    });
+
+    // ============ COPIA DIRECCIÓN WALLET ============
+    document.getElementById('copyWalletBtn')?.addEventListener('click', function() {
+        const address = 'TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5';
+        navigator.clipboard?.writeText(address).then(() => {
+            alert('✅ Dirección copiada al portapapeles');
+        }).catch(() => {
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = address;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            alert('✅ Dirección copiada');
+        });
+    });
+
+    // ============ OBSERVADOR DE AUTENTICACIÓN ============
+    auth.onAuthStateChanged(user => {
+        updateUI(user);
+    });
+
+    // ============ INICIO: por defecto login ============
+    setAuthMode(true);
+    // Si ya hay usuario autenticado, el observer se encarga.
+    // Si no, mostramos auth.
+
+    // Render inicial (por si no hay usuario, pero igualmente se renderiza al loguearse)
+    // Además pre-render para que esté listo
+    renderCuentas();
+</script>
+
+</body>
+</html>
