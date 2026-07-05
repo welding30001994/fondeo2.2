@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fondeo Instantáneo · Comprar cuenta</title>
+    <title>Fondeo Instantáneo · Cuentas</title>
     <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -35,7 +35,6 @@
             box-shadow: 0 30px 60px rgba(0, 20, 40, 0.08), 0 10px 30px rgba(0, 0, 0, 0.02);
             padding: 2.5rem 2.5rem 3rem;
             transition: all 0.2s ease;
-            position: relative;
         }
 
         /* Header */
@@ -76,7 +75,6 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            flex-wrap: wrap;
         }
 
         .user-area .email {
@@ -120,13 +118,6 @@
         .btn-primary:hover {
             background: #1a3f5f;
             transform: scale(1.02);
-        }
-
-        .btn-success {
-            background: #0b7e4a;
-        }
-        .btn-success:hover {
-            background: #0a6a3e;
         }
 
         /* Auth forms */
@@ -339,132 +330,6 @@
             display: none !important;
         }
 
-        /* ===== MODAL DE COMPRA ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            padding: 1rem;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-box {
-            background: white;
-            max-width: 480px;
-            width: 100%;
-            border-radius: 40px;
-            padding: 2rem 2rem 1.8rem;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
-            animation: modalIn 0.25s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-box h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0b2b4a;
-            margin-bottom: 0.25rem;
-        }
-
-        .modal-box .sub {
-            color: #64748b;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .modal-box .detail-row {
-            display: flex;
-            justify-content: space-between;
-            background: #f8fafc;
-            padding: 10px 16px;
-            border-radius: 20px;
-            margin-bottom: 14px;
-            font-weight: 500;
-        }
-
-        .modal-box input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-            background: white;
-            transition: 0.2s;
-        }
-
-        .modal-box input:focus {
-            outline: none;
-            border-color: #2a7de1;
-            box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.12);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .modal-actions button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.95rem;
-        }
-
-        .modal-actions .btn-cancel {
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-
-        .modal-actions .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .modal-actions .btn-confirm {
-            background: #0b2b4a;
-            color: white;
-        }
-
-        .modal-actions .btn-confirm:hover {
-            background: #1a3f5f;
-        }
-
-        .modal-box .wallet-info {
-            background: #eef7ff;
-            padding: 10px 14px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            margin: 12px 0 4px;
-            color: #0b2b4a;
-            border: 1px solid #d4e2f5;
-            word-break: break-all;
-        }
-
-        .modal-box .wallet-info i {
-            margin-right: 8px;
-            color: #2a7de1;
-        }
-
         /* responsive */
         @media (max-width: 650px) {
             .container { padding: 1.5rem; }
@@ -472,7 +337,6 @@
             .header { flex-direction: column; align-items: stretch; gap: 12px; }
             .user-area { justify-content: flex-start; flex-wrap: wrap; }
             .grid-cuentas { grid-template-columns: 1fr 1fr; }
-            .modal-box { padding: 1.5rem; }
         }
 
         @media (max-width: 450px) {
@@ -496,28 +360,33 @@
         </div>
     </div>
 
-    <!-- AUTH -->
+    <!-- ========== SECCIÓN AUTH ========== -->
     <div id="authSection" class="auth-section">
         <h2 id="authTitle">Iniciar sesión</h2>
         <p id="authSubtitle">Accede a tu cuenta de fondeo</p>
+
         <div id="errorMessage" class="error-msg"><i class="fas fa-exclamation-circle"></i> <span id="errorText">Error</span></div>
+
         <input type="email" id="emailInput" placeholder="Correo electrónico" />
         <input type="password" id="passwordInput" placeholder="Contraseña (mínimo 6 caracteres)" />
+
         <div class="auth-row">
             <button class="btn-primary" id="authActionBtn"><i class="fas fa-arrow-right"></i> Ingresar</button>
         </div>
+
         <div class="auth-switch" id="authSwitch">
             ¿No tienes cuenta? <a id="toggleAuthLink">Regístrate</a>
         </div>
     </div>
 
-    <!-- HOME (cuentas) -->
+    <!-- ========== HOME (cuentas) ========== -->
     <div id="homeSection" class="hidden">
         <div class="home-header">
             <h2><i class="fas fa-coins"></i> Cuentas de fondeo</h2>
             <div class="wallet-badge"><i class="fas fa-wallet"></i> USDT (TRC20)</div>
         </div>
 
+        <!-- Dirección de monedero -->
         <div style="margin: 0 0 4px 0;">
             <span style="font-weight: 600; color: #0b2b4a;"><i class="fas fa-qrcode"></i> Deposita aquí:</span>
             <div class="wallet-address">
@@ -526,7 +395,10 @@
             </div>
         </div>
 
-        <div class="grid-cuentas" id="cuentasGrid"></div>
+        <!-- Grid de cuentas -->
+        <div class="grid-cuentas" id="cuentasGrid">
+            <!-- inyectado con JS -->
+        </div>
 
         <div class="footer-note">
             <span><i class="fas fa-shield-alt"></i> Compra segura · Soporte 24/7</span>
@@ -535,39 +407,8 @@
     </div>
 </div>
 
-<!-- ===== MODAL DE COMPRA ===== -->
-<div class="modal-overlay" id="compraModal">
-    <div class="modal-box">
-        <h3><i class="fas fa-shopping-cart" style="color:#2a7de1;"></i> Confirmar compra</h3>
-        <p class="sub">Completa tus datos y realiza el depósito</p>
-
-        <div class="detail-row">
-            <span>Cuenta</span>
-            <span id="modalMonto" style="font-weight:700;">$10.000</span>
-        </div>
-        <div class="detail-row">
-            <span>Precio</span>
-            <span id="modalPrecio" style="color:#2a7de1; font-weight:700;">$650 USD</span>
-        </div>
-
-        <input type="email" id="modalEmail" placeholder="Correo electrónico *" required />
-        <input type="tel" id="modalTelefono" placeholder="Número de teléfono (con código país) *" required />
-
-        <div class="wallet-info">
-            <i class="fas fa-coins"></i> Deposita <strong id="modalPrecioWallet">$650</strong> USDT (TRC20) a:
-            <br><span style="font-family:monospace; background:white; padding:2px 8px; border-radius:12px; display:inline-block; margin-top:6px;">TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5</span>
-        </div>
-
-        <div class="modal-actions">
-            <button class="btn-cancel" id="modalCancelBtn"><i class="fas fa-times"></i> Cancelar</button>
-            <button class="btn-confirm" id="modalConfirmBtn"><i class="fas fa-check"></i> Confirmar compra</button>
-        </div>
-        <p style="font-size:0.75rem; color:#94a3b8; margin-top:12px; text-align:center;">Al confirmar, recibirás un mensaje de bienvenida por WhatsApp</p>
-    </div>
-</div>
-
 <script>
-    // ============ FIREBASE ============
+    // ============ CONFIGURACIÓN FIREBASE ============
     const firebaseConfig = {
         apiKey: "AIzaSyCpFnSLx-ZUq6j27T-w_nvsdSvUrNs688g",
         authDomain: "heyding-kayser.firebaseapp.com",
@@ -578,10 +419,11 @@
         appId: "1:231005618306:web:b349379b513145b6e6349b",
         measurementId: "G-0F9T839VVZ"
     };
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // ============ DOM ============
+    // ============ ELEMENTOS DOM ============
     const authSection = document.getElementById('authSection');
     const homeSection = document.getElementById('homeSection');
     const userEmail = document.getElementById('userEmail');
@@ -596,20 +438,9 @@
     const errorText = document.getElementById('errorText');
     const cuentasGrid = document.getElementById('cuentasGrid');
 
-    // Modal
-    const modalOverlay = document.getElementById('compraModal');
-    const modalMonto = document.getElementById('modalMonto');
-    const modalPrecio = document.getElementById('modalPrecio');
-    const modalPrecioWallet = document.getElementById('modalPrecioWallet');
-    const modalEmail = document.getElementById('modalEmail');
-    const modalTelefono = document.getElementById('modalTelefono');
-    const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-    const modalCancelBtn = document.getElementById('modalCancelBtn');
+    let isLogin = true; // true = login, false = registro
 
-    let isLogin = true;
-    let selectedCuenta = null;
-
-    // ============ DATOS ============
+    // ============ DATOS DE CUENTAS ============
     const cuentas = [
         { monto: 10000, precio: 650 },
         { monto: 25000, precio: 750 },
@@ -636,82 +467,30 @@
             cuentasGrid.appendChild(card);
         });
 
+        // Eventos comprar
         document.querySelectorAll('.btn-comprar').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const monto = parseInt(this.dataset.monto);
-                const precio = parseInt(this.dataset.precio);
-                abrirModal(monto, precio);
+            btn.addEventListener('click', function(e) {
+                const monto = this.dataset.monto;
+                const precio = this.dataset.precio;
+                alert(`✅ Cuenta de $${Number(monto).toLocaleString()} seleccionada.\nPrecio: $${precio} USD\n\nDeposita exactamente $${precio} USDT (TRC20) a la dirección mostrada.\n\nDirección: TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5`);
+                // Aquí podrías agregar lógica de pago / redirección
             });
         });
     }
 
-    // ============ MODAL ============
-    function abrirModal(monto, precio) {
-        selectedCuenta = { monto, precio };
-        modalMonto.textContent = '$' + monto.toLocaleString();
-        modalPrecio.textContent = '$' + precio + ' USD';
-        modalPrecioWallet.textContent = '$' + precio;
-        // Prellenar email del usuario logueado
-        const user = auth.currentUser;
-        if (user && user.email) {
-            modalEmail.value = user.email;
-        } else {
-            modalEmail.value = '';
-        }
-        modalTelefono.value = '';
-        modalOverlay.classList.add('active');
-    }
-
-    function cerrarModal() {
-        modalOverlay.classList.remove('active');
-        selectedCuenta = null;
-    }
-
-    // ============ CONFIRMAR COMPRA ============
-    modalConfirmBtn.addEventListener('click', function() {
-        const email = modalEmail.value.trim();
-        const telefono = modalTelefono.value.trim();
-
-        if (!email || !telefono) {
-            alert('⚠️ Por favor, completa tu correo y número de teléfono.');
-            return;
-        }
-        if (!selectedCuenta) {
-            alert('Error, selecciona una cuenta nuevamente.');
-            cerrarModal();
-            return;
-        }
-
-        // Simular envío de mensaje de bienvenida por WhatsApp
-        const monto = selectedCuenta.monto;
-        const precio = selectedCuenta.precio;
-        const mensaje = `🎉 *¡Bienvenido a Fondeo Instantáneo!* 🎉\n\n✅ Tu compra de la cuenta de *$${monto.toLocaleString()}* ha sido confirmada.\n💰 Precio: $${precio} USD (USDT TRC20)\n📧 Correo: ${email}\n📱 Teléfono: ${telefono}\n\n🔹 *Próximos pasos:*\n1. Realiza el depósito de $${precio} USDT a la dirección:\n   `TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5`\n2. Una vez verificado, recibirás tu cuenta en 24h.\n\n¡Gracias por confiar en nosotros! 🚀`;
-
-        // Abrir WhatsApp con mensaje (simulación)
-        const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-        window.open(url, '_blank');
-
-        // Mostrar alerta de confirmación
-        alert(`✅ Compra de cuenta $${monto.toLocaleString()} registrada.\n📧 Correo: ${email}\n📱 Teléfono: ${telefono}\n\n💬 Se abrirá WhatsApp con el mensaje de bienvenida.`);
-
-        cerrarModal();
-    });
-
-    modalCancelBtn.addEventListener('click', cerrarModal);
-    modalOverlay.addEventListener('click', function(e) {
-        if (e.target === modalOverlay) cerrarModal();
-    });
-
-    // ============ AUTH UI ============
+    // ============ ACTUALIZAR UI SEGÚN AUTENTICACIÓN ============
     function updateUI(user) {
         if (user) {
+            // Usuario logueado
             authSection.classList.add('hidden');
             homeSection.classList.remove('hidden');
             userEmail.textContent = user.email || 'usuario';
             renderCuentas();
         } else {
+            // No logueado
             authSection.classList.remove('hidden');
             homeSection.classList.add('hidden');
+            // Resetear formulario
             emailInput.value = '';
             passwordInput.value = '';
             errorMessage.style.display = 'none';
@@ -719,6 +498,7 @@
         }
     }
 
+    // ============ MODO LOGIN / REGISTRO ============
     function setAuthMode(login) {
         isLogin = login;
         if (login) {
@@ -726,6 +506,7 @@
             authSubtitle.textContent = 'Accede a tu cuenta de fondeo';
             authActionBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Ingresar';
             toggleAuthLink.textContent = 'Regístrate';
+            // Cambiar comportamiento del link
         } else {
             authTitle.textContent = 'Crear cuenta';
             authSubtitle.textContent = 'Regístrate para acceder a las cuentas';
@@ -735,20 +516,37 @@
         errorMessage.style.display = 'none';
     }
 
+    // ============ TOGGLE AUTH ============
     toggleAuthLink.addEventListener('click', function(e) {
         e.preventDefault();
         setAuthMode(!isLogin);
     });
 
+    // ============ ACCIÓN PRINCIPAL AUTH ============
     async function handleAuthAction() {
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
-        if (!email || !password) { showError('Completa todos los campos.'); return; }
-        if (password.length < 6) { showError('La contraseña debe tener al menos 6 caracteres.'); return; }
+
+        if (!email || !password) {
+            showError('Por favor, completa todos los campos.');
+            return;
+        }
+        if (password.length < 6) {
+            showError('La contraseña debe tener al menos 6 caracteres.');
+            return;
+        }
+
         try {
-            if (isLogin) await auth.signInWithEmailAndPassword(email, password);
-            else await auth.createUserWithEmailAndPassword(email, password);
+            if (isLogin) {
+                // Iniciar sesión
+                await auth.signInWithEmailAndPassword(email, password);
+            } else {
+                // Registro
+                await auth.createUserWithEmailAndPassword(email, password);
+            }
+            // Si llega aquí, el listener se encarga de actualizar UI
         } catch (error) {
+            console.error(error);
             let msg = error.message;
             if (error.code === 'auth/user-not-found') msg = 'Usuario no encontrado.';
             else if (error.code === 'auth/wrong-password') msg = 'Contraseña incorrecta.';
@@ -759,8 +557,12 @@
     }
 
     authActionBtn.addEventListener('click', handleAuthAction);
+
+    // Enter key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !authSection.classList.contains('hidden')) handleAuthAction();
+        if (e.key === 'Enter' && !authSection.classList.contains('hidden')) {
+            handleAuthAction();
+        }
     });
 
     function showError(msg) {
@@ -768,14 +570,18 @@
         errorText.textContent = msg;
     }
 
-    logoutBtn.addEventListener('click', () => auth.signOut());
+    // ============ CIERRE DE SESIÓN ============
+    logoutBtn.addEventListener('click', function() {
+        auth.signOut();
+    });
 
-    // Copiar wallet
+    // ============ COPIA DIRECCIÓN WALLET ============
     document.getElementById('copyWalletBtn')?.addEventListener('click', function() {
         const address = 'TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5';
         navigator.clipboard?.writeText(address).then(() => {
             alert('✅ Dirección copiada al portapapeles');
         }).catch(() => {
+            // Fallback
             const ta = document.createElement('textarea');
             ta.value = address;
             document.body.appendChild(ta);
@@ -786,9 +592,18 @@
         });
     });
 
-    // Observer
-    auth.onAuthStateChanged(user => updateUI(user));
+    // ============ OBSERVADOR DE AUTENTICACIÓN ============
+    auth.onAuthStateChanged(user => {
+        updateUI(user);
+    });
+
+    // ============ INICIO: por defecto login ============
     setAuthMode(true);
+    // Si ya hay usuario autenticado, el observer se encarga.
+    // Si no, mostramos auth.
+
+    // Render inicial (por si no hay usuario, pero igualmente se renderiza al loguearse)
+    // Además pre-render para que esté listo
     renderCuentas();
 </script>
 
