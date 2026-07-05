@@ -330,13 +330,165 @@
             display: none !important;
         }
 
-        /* responsive */
+        /* ----- MODAL ELEGANTE ----- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 43, 74, 0.35);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: #ffffff;
+            border-radius: 40px;
+            max-width: 460px;
+            width: 92%;
+            padding: 2.2rem 2rem 2rem;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0b2b4a;
+            letter-spacing: -0.3px;
+        }
+
+        .modal-header h3 i {
+            color: #2a7de1;
+            margin-right: 10px;
+        }
+
+        .modal-close {
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            color: #475569;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            color: #0b2b4a;
+        }
+
+        .modal-body {
+            margin-bottom: 1.8rem;
+        }
+
+        .modal-body .detail-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+
+        .modal-body .detail-line span:last-child {
+            font-weight: 600;
+            color: #0b2b4a;
+        }
+
+        .modal-body .info-box {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin: 16px 0 10px;
+            font-size: 0.9rem;
+            color: #1e293b;
+            border-left: 4px solid #2a7de1;
+        }
+
+        .modal-body .info-box i {
+            color: #2a7de1;
+            margin-right: 8px;
+        }
+
+        .modal-body label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e293b;
+            display: block;
+            margin: 16px 0 6px;
+        }
+
+        .modal-body input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .modal-body input:focus {
+            outline: none;
+            border-color: #2a7de1;
+            box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.12);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 0.8rem;
+        }
+
+        .modal-footer .btn-primary {
+            padding: 12px 32px;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .modal-footer .btn-outline {
+            padding: 12px 24px;
+        }
+
         @media (max-width: 650px) {
             .container { padding: 1.5rem; }
             .brand h1 { font-size: 1.4rem; }
             .header { flex-direction: column; align-items: stretch; gap: 12px; }
             .user-area { justify-content: flex-start; flex-wrap: wrap; }
             .grid-cuentas { grid-template-columns: 1fr 1fr; }
+            .modal { padding: 1.8rem 1.2rem; }
         }
 
         @media (max-width: 450px) {
@@ -407,6 +559,37 @@
     </div>
 </div>
 
+<!-- ========== MODAL ELEGANTE ========== -->
+<div class="modal-overlay" id="purchaseModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-gem"></i> Confirmar compra</h3>
+            <button class="modal-close" id="modalCloseBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="detail-line">
+                <span>Cuenta</span>
+                <span id="modalMonto">$10,000</span>
+            </div>
+            <div class="detail-line">
+                <span>Precio</span>
+                <span id="modalPrecio">$650 USD</span>
+            </div>
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i> Deposita el monto exacto en USDT (TRC20) a la dirección mostrada.
+            </div>
+            <label for="whatsappInput"><i class="fab fa-whatsapp"></i> Número de WhatsApp</label>
+            <input type="tel" id="whatsappInput" placeholder="Ej: +51 987 654 321" />
+            <label for="emailConfirmInput"><i class="fas fa-envelope"></i> Correo electrónico (para credenciales)</label>
+            <input type="email" id="emailConfirmInput" placeholder="tu@email.com" />
+        </div>
+        <div class="modal-footer">
+            <button class="btn-outline" id="modalCancelBtn">Cancelar</button>
+            <button class="btn-primary" id="modalConfirmBtn"><i class="fas fa-check-circle"></i> Enviar datos</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // ============ CONFIGURACIÓN FIREBASE ============
     const firebaseConfig = {
@@ -438,7 +621,18 @@
     const errorText = document.getElementById('errorText');
     const cuentasGrid = document.getElementById('cuentasGrid');
 
-    let isLogin = true; // true = login, false = registro
+    // Modal
+    const modal = document.getElementById('purchaseModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalCancelBtn = document.getElementById('modalCancelBtn');
+    const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+    const modalMonto = document.getElementById('modalMonto');
+    const modalPrecio = document.getElementById('modalPrecio');
+    const whatsappInput = document.getElementById('whatsappInput');
+    const emailConfirmInput = document.getElementById('emailConfirmInput');
+
+    let isLogin = true;
+    let selectedAccount = null;
 
     // ============ DATOS DE CUENTAS ============
     const cuentas = [
@@ -467,30 +661,87 @@
             cuentasGrid.appendChild(card);
         });
 
-        // Eventos comprar
         document.querySelectorAll('.btn-comprar').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                const monto = this.dataset.monto;
-                const precio = this.dataset.precio;
-                alert(`✅ Cuenta de $${Number(monto).toLocaleString()} seleccionada.\nPrecio: $${precio} USD\n\nDeposita exactamente $${precio} USDT (TRC20) a la dirección mostrada.\n\nDirección: TCAgtcQNCecCRn5fV7ZrMa5euFzSyzPUu5`);
-                // Aquí podrías agregar lógica de pago / redirección
+                const monto = Number(this.dataset.monto);
+                const precio = Number(this.dataset.precio);
+                selectedAccount = { monto, precio };
+                openModal(monto, precio);
             });
         });
     }
 
+    // ============ MODAL ============
+    function openModal(monto, precio) {
+        modalMonto.textContent = `$${monto.toLocaleString()}`;
+        modalPrecio.textContent = `$${precio} USD`;
+        // Prellenar email con el usuario autenticado
+        const user = auth.currentUser;
+        if (user && user.email) {
+            emailConfirmInput.value = user.email;
+        } else {
+            emailConfirmInput.value = '';
+        }
+        whatsappInput.value = '';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalCancelBtn.addEventListener('click', closeModal);
+
+    // Cerrar al hacer clic fuera del modal
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+    });
+
+    // Confirmar compra
+    modalConfirmBtn.addEventListener('click', function() {
+        const whatsapp = whatsappInput.value.trim();
+        const email = emailConfirmInput.value.trim();
+
+        if (!whatsapp) {
+            alert('⚠️ Por favor, ingresa tu número de WhatsApp.');
+            return;
+        }
+        if (!email) {
+            alert('⚠️ Por favor, ingresa tu correo electrónico.');
+            return;
+        }
+        if (!selectedAccount) return;
+
+        // Simular envío de datos
+        console.log('📦 Compra confirmada:', {
+            cuenta: selectedAccount,
+            whatsapp,
+            email
+        });
+
+        // Aquí se enviaría a un backend o Firebase
+        alert(`✅ ¡Gracias! Hemos recibido tu solicitud.\n\n📧 Las credenciales serán enviadas a:\n${email}\n\n📱 Te contactaremos por WhatsApp al:\n${whatsapp}\n\nRevisa tu bandeja de entrada en unos minutos.`);
+
+        closeModal();
+        // Reiniciar campos
+        whatsappInput.value = '';
+        emailConfirmInput.value = '';
+        selectedAccount = null;
+    });
+
     // ============ ACTUALIZAR UI SEGÚN AUTENTICACIÓN ============
     function updateUI(user) {
         if (user) {
-            // Usuario logueado
             authSection.classList.add('hidden');
             homeSection.classList.remove('hidden');
             userEmail.textContent = user.email || 'usuario';
             renderCuentas();
         } else {
-            // No logueado
             authSection.classList.remove('hidden');
             homeSection.classList.add('hidden');
-            // Resetear formulario
             emailInput.value = '';
             passwordInput.value = '';
             errorMessage.style.display = 'none';
@@ -506,7 +757,6 @@
             authSubtitle.textContent = 'Accede a tu cuenta de fondeo';
             authActionBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Ingresar';
             toggleAuthLink.textContent = 'Regístrate';
-            // Cambiar comportamiento del link
         } else {
             authTitle.textContent = 'Crear cuenta';
             authSubtitle.textContent = 'Regístrate para acceder a las cuentas';
@@ -516,7 +766,6 @@
         errorMessage.style.display = 'none';
     }
 
-    // ============ TOGGLE AUTH ============
     toggleAuthLink.addEventListener('click', function(e) {
         e.preventDefault();
         setAuthMode(!isLogin);
@@ -538,13 +787,10 @@
 
         try {
             if (isLogin) {
-                // Iniciar sesión
                 await auth.signInWithEmailAndPassword(email, password);
             } else {
-                // Registro
                 await auth.createUserWithEmailAndPassword(email, password);
             }
-            // Si llega aquí, el listener se encarga de actualizar UI
         } catch (error) {
             console.error(error);
             let msg = error.message;
@@ -558,10 +804,12 @@
 
     authActionBtn.addEventListener('click', handleAuthAction);
 
-    // Enter key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !authSection.classList.contains('hidden')) {
             handleAuthAction();
+        }
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
         }
     });
 
@@ -581,7 +829,6 @@
         navigator.clipboard?.writeText(address).then(() => {
             alert('✅ Dirección copiada al portapapeles');
         }).catch(() => {
-            // Fallback
             const ta = document.createElement('textarea');
             ta.value = address;
             document.body.appendChild(ta);
@@ -597,13 +844,7 @@
         updateUI(user);
     });
 
-    // ============ INICIO: por defecto login ============
     setAuthMode(true);
-    // Si ya hay usuario autenticado, el observer se encarga.
-    // Si no, mostramos auth.
-
-    // Render inicial (por si no hay usuario, pero igualmente se renderiza al loguearse)
-    // Además pre-render para que esté listo
     renderCuentas();
 </script>
 
